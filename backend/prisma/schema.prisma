@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  password  String
+  name      String
+  subtitles Subtitle[]
+}
+
+model Subtitle {
+  id        Int            @id @default(autoincrement())
+  url       String?
+  userId    Int
+  title     String
+  createdAt DateTime       @default(now())
+  format    String
+  status    SubtitleStatus @default(PROCESSING)
+  updatedAt DateTime       @updatedAt
+  user      User           @relation(fields: [userId], references: [id])
+}
+
+enum SubtitleStatus {
+  PROCESSING
+  COMPLETED
+  FAILED
+}
