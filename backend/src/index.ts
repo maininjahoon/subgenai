@@ -567,6 +567,6 @@ app.get("/health", (_req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
-app.listen(env.PORT, () => {
-  console.log(`Server is running on port http://localhost:${env.PORT}`);
+app.listen(Number(env.PORT), "0.0.0.0", () => {
+  console.log(`Server is running on port ${env.PORT}`);
 });
