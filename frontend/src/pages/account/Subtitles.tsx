@@ -105,6 +105,36 @@ function SubtitlesContent() {
     }
   }, [searchParams, setSearchParams]);
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const trimmedSearch = search.trim();
+      const currentSearch = searchParams.get("search") ?? "";
+
+      if (trimmedSearch === currentSearch) {
+        return;
+      }
+
+      setSearchParams(
+        (prev) => {
+          const params = new URLSearchParams(prev);
+
+          if (trimmedSearch) {
+            params.set("search", trimmedSearch);
+          } else {
+            params.delete("search");
+          }
+
+          params.set("page", "1");
+
+          return params;
+        },
+        { replace: true },
+      );
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [search, searchParams, setSearchParams]);
+
   const handleDeleteSubtitle = async (id: number) => {
     try {
       await deleteSubtitle(id);
