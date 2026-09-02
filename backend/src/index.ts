@@ -45,6 +45,8 @@ import { isPrismaError } from "./utils/isPrismaError.js";
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 app.use(
   cors({
     origin: env.FRONTEND_URL,
@@ -65,7 +67,7 @@ app.use(
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 1000 * 60 * 60 * 24, // 1 day
-      sameSite: "lax",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     },
   }),
 );
